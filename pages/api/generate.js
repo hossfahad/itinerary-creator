@@ -15,11 +15,21 @@ export default async function (req, res) {
     return;
   }
 
-  const animal = req.body.animal || '';
-  if (animal.trim().length === 0) {
+  const city = req.body.city || '';
+  if (city.trim().length === 0) {
     res.status(400).json({
       error: {
-        message: "Please enter a valid animal",
+        message: "Please enter a valid city name",
+      }
+    });
+    return;
+  }
+
+  const days = req.body.days || '';
+  if (days === '') {
+    res.status(400).json({
+      error: {
+        message: "Please enter the number of days you plan to visit",
       }
     });
     return;
@@ -28,8 +38,8 @@ export default async function (req, res) {
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: generatePrompt(animal),
-      temperature: 0.6,
+      prompt: generatePrompt(city, days),
+      temperature: 1,
     });
     res.status(200).json({ result: completion.data.choices[0].text });
   } catch(error) {
@@ -48,15 +58,7 @@ export default async function (req, res) {
   }
 }
 
-function generatePrompt(animal) {
-  const capitalizedAnimal =
-    animal[0].toUpperCase() + animal.slice(1).toLowerCase();
-  return `Suggest three names for an animal that is a superhero.
+function generatePrompt(city, days) {
 
-Animal: Cat
-Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
-Animal: Dog
-Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-Animal: ${capitalizedAnimal}
-Names:`;
-}
+  return `Suggest a detailed itinerary for things to do in ${city} based on ${days} days.`;
+};
