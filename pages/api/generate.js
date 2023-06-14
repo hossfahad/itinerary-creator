@@ -15,6 +15,7 @@ export default async function (req, res) {
     return;
   }
 
+
   const city = req.body.city || '';
   if (city.trim().length === 0) {
     res.status(400).json({
@@ -57,6 +58,7 @@ export default async function (req, res) {
     }
   }
 }
+
 
 function generatePrompt(city, days) {
 

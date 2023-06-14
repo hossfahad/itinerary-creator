@@ -15,6 +15,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify({ city: cityInput, days: daysInput }),
       });
 
@@ -36,7 +37,7 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>OpenAI Quickstart</title>
+        <title>Itinerary Creator</title>
       </Head>
 
       <main className={styles.main}>
@@ -56,7 +57,6 @@ export default function Home() {
             value={daysInput}
             onChange={(e) => setDaysInput(e.target.value)}
            />
-
           <input type="submit" value="Generate Itinerary" />
         </form>
         <div className={styles.result}>{result}</div>
