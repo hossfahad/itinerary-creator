@@ -3,7 +3,8 @@ import { useState } from "react";
 import styles from "./index.module.css";
 
 export default function Home() {
-  const [locationInput, setLocationInput] = useState("");
+  const [cityInput, setCityInput] = useState("");
+  const [daysInput, setDaysInput] = useState("");
   const [result, setResult] = useState();
 
   async function onSubmit(event) {
@@ -14,7 +15,8 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ location: locationInput }),
+
+        body: JSON.stringify({ city: cityInput, days: daysInput }),
       });
 
       const data = await response.json();
@@ -23,7 +25,8 @@ export default function Home() {
       }
 
       setResult(data.result);
-      setLocationInput(location);
+      setCityInput("");
+      setDaysInput("");
     } catch(error) {
       // Consider implementing your own error handling logic here
       console.error(error);
@@ -42,11 +45,18 @@ export default function Home() {
         <form onSubmit={onSubmit}>
           <input
             type="text"
-            name="location"
-            placeholder="Enter a city or location"
-            value={locationInput}
-            onChange={(e) => setLocationInput(e.target.value)}
+            name="city"
+            placeholder="Enter a city"
+            value={cityInput}
+            onChange={(e) => setCityInput(e.target.value)}
           />
+          <input
+            type="integer"
+            name="days"
+            placeholder="Enter number of days"
+            value={daysInput}
+            onChange={(e) => setDaysInput(e.target.value)}
+           />
           <input type="submit" value="Generate Itinerary" />
         </form>
         <div className={styles.result}>{result}</div>

@@ -15,11 +15,22 @@ export default async function (req, res) {
     return;
   }
 
-  const location = req.body.location || '';
-  if (location.trim().length === 0) {
+
+  const city = req.body.city || '';
+  if (city.trim().length === 0) {
     res.status(400).json({
       error: {
-        message: "Please enter a valid city or country name",
+        message: "Please enter a valid city name",
+      }
+    });
+    return;
+  }
+
+  const days = req.body.days || '';
+  if (days === '') {
+    res.status(400).json({
+      error: {
+        message: "Please enter the number of days you plan to visit",
       }
     });
     return;
@@ -27,8 +38,8 @@ export default async function (req, res) {
 
   try {
     const completion = await openai.createCompletion({
-      model: "gpt-3.5-turbo",
-      prompt: generatePrompt(location),
+      model: "text-davinci-003",
+      prompt: generatePrompt(city, days),
       temperature: 1,
     });
     res.status(200).json({ result: completion.data.choices[0].text });
@@ -48,14 +59,8 @@ export default async function (req, res) {
   }
 }
 
-function generatePrompt(generateItinerary) {
-  const givenLocation = {
-  return:
-`Create an itinerary in ${locationInput.value}
 
-City: New York City
-Things to do: Visit the Statue of Liberty, from there, go to the nearby italian restaurant called. Then from there, you can spend a couple hours in the park."
-City: ${location}
-Things to do:'
-  }
+function generatePrompt(city, days) {
+
+  return `Suggest a detailed itinerary for things to do in ${city} based on ${days} days.`;
 };
